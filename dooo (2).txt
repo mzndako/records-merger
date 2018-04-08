@@ -1,0 +1,32 @@
+ Dim xlApp As Excel.Application = New Excel.Application
+
+        xlApp.SheetsInNewWorkbook = 1
+
+        Dim xlWorkBook As Excel.Workbook = xlApp.Workbooks.Add
+        Dim xlWorkSheet As Excel.Worksheet = xlWorkBook.Worksheets.Item(1)
+
+        xlWorkSheet.Name = "Example_Export"
+
+        For nCol = 0 To DataGridView1.Columns.Count - 1
+            Console.WriteLine(nCol & "=" & DataGridView1.Columns.Count)
+            Console.WriteLine(DataGridView1.Columns(nCol).HeaderText & " ")
+            xlWorkSheet.Cells(1, nCol + 1) = DataGridView1.Columns(nCol).HeaderText.ToUpper
+
+            xlWorkSheet.Cells(1, nCol + 1).Font.Bold = True
+        Next
+
+        For nRow = 0 To DataGridView1.Rows.Count - 1
+
+            For nCol = 0 To DataGridView1.Columns.Count - 1
+                xlWorkSheet.Cells(nRow + 2, nCol + 1) = DataGridView1.Rows(nRow).Cells(nCol).Value
+            Next nCol
+
+        Next nRow
+
+        xlApp.DisplayAlerts = False
+
+        xlWorkBook.SaveAs("C:\Example4.xlsx", Excel.XlFileFormat.xlWorkbookDefault, Type.Missing, Type.Missing, Type.Missing, Type.Missing, _
+                           Excel.XlSaveAsAccessMode.xlNoChange, Excel.XlSaveConflictResolution.xlLocalSessionChanges)
+
+        xlWorkBook.Close()
+        xlApp.Quit()
